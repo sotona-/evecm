@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/datejs.js"></script>
+        <script type="text/javascript" src="js/funcs.js"></script>
+        <script type="text/javascript" src="js/bg.js"></script>
+        <title>bg</title>
+    </head>
+    <body>
+<div id="main">
+        <ul class="tabs">
+            <li><a href="#tab1">MAIN</a></li>
+            <li><a href="#tab2">SKILLS</a></li>
+            <li><a href="#tab3">ORDERS</a></li>
+        </ul>
+        <div class="tab_container">
+            <div id="tab1" class="tab_content">
+            <table width="100%">
+            <tr class="info"><td rowspan="4"><span id="portrait"/></td><td>Character: <span id="idName" /></td></tr>
+            <tr class="info"><td>Balance: <span id="idBalance" /></td></tr>
+            <tr class="info"><td>Corporation: <span id="idCorp" /></td></tr>
+            <tr class="info"><td>Alliance: <span id="idAlly" /></td></tr>
+            <tr><td colspan="2"><div id="idSkillInTraining" /></td></tr>
+            </table>
+            </div>
+            <div id="tab2" class="tab_content">
+                <div id="idListeSkillsConnus"></div>
+            </div>
+            <div id="tab3" class="tab_content">
+                <span id="summCont">Total: <span id="ordersSumm"></span> ISK</span>
+                <table id="ordersList">
+                <tr><td>station</td><td>type</td><td>count</td><td>summ</td><td>time</td></tr>
+                </table>
+            </div>
+        </div>
+</div>
+    </body>
+</html>

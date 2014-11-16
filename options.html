@@ -1,0 +1,25 @@
+<html>
+<head><title>EveCM settings</title>
+<script type="text/javascript" src="js/options.js"></script>
+<link rel="stylesheet" type="text/css" href="options.css"/>
+</head>
+
+<body>
+<center>
+<table id="main"><tr><td>
+<table id="options">
+<tr><th colspan="2">Settings (you can create API keys at <a href="https://support.eveonline.com/api">support.eveonline.com</a>)</th></tr>
+<tr><td>keyID</td><td><input type="text" id="kid" size="15"></td></tr>
+<tr><td>vCode</td><td><input type="text" id="vcode" size="100"></td></tr>
+<tr><td>character</td><td><button id="get_chars">Get list & key info</button><select id="chars"></select></td></tr>
+<tr><td>static data</td><td><button id="update_xml">Update</button> <span id="last-upd">none</span></td></tr>
+<tr><td colspan="2"><input type="checkbox" id="seconds"> Display seconds in tooltip count</td></tr>
+<tr><td><button id="save_options">Save</button></td><td><span id="status"></span></td></tr>
+</table></td>
+<td><div id="keyDiv">
+<div id="keyDesc">Key type: <span id="keyType"></span>, mask:<span id="keyMask"></span></div>
+<ul id="keyInfo"></ul></div></td></tr>
+</table>
+</center>
+</body>
+</html>
