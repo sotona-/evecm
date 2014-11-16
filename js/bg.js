@@ -202,12 +202,17 @@ function recupInfosPerso() {
     var corpName = reqCharacterSheet.responseXML.getElementsByTagName("corporationName")[0].textContent;
     var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
     var rowsetList = reqCharacterSheet.responseXML.getElementsByTagName("rowset");
+    var rowsetSkillsElement;
 
     var portrait = document.createElement('img');
     portrait.setAttribute('src', 'http://image.eveonline.com/Character/'+characterid+'_64.jpg');
 
+    for (var i=0, rowset; rowset = rowsetList[i]; i++){
+        if (rowset.getAttribute('name')=='skills'){
+           rowsetSkillsElement = rowset;
+        }
+    }
 
-    var rowsetSkillsElement = rowsetList[0];
 
 
 
@@ -353,30 +358,33 @@ function drawOrders() {
     var tIds = [];
     var sIds = [];
     var total = 0;
-    var orders = ordersList.responseXML.getElementsByTagName("row");
+    var orders = [];
+    orders = ordersList.responseXML.getElementsByTagName("row");
+    if (orders.length>0) {
 
-    for (var i=0, row; row = orders[i]; i++) {
-        if (row.getAttribute('orderState')==0) {
-            var orderTr = document.createElement('tr');
-            var station = row.getAttribute('stationID');
-            var type = row.getAttribute('typeID');
-            var rem = row.getAttribute('volRemaining');
-            var vol = rem+'/'+row.getAttribute('volEntered');
-            var price = row.getAttribute('price');
-            var dur = differenceDates(orderExpire(row.getAttribute('issued'),row.getAttribute('duration')),0)[4];
-            var issued = row.getAttribute('issued');
-            var summ = Math.round(price*rem);
-            total = summ+total;
-            sIds = distinctAdd(sIds,station);
-            tIds = distinctAdd(tIds,type);
-            orderTr.innerHTML = '<td class=\'s'+station+'\'></td><td class=\'t'+type+'\'></td><td>'+vol+'</td><td>'+delim(summ)+'</td><td>'+dur+'</td>';
-            document.getElementById('ordersList').appendChild(orderTr);
+        for (var i=0, row; row = orders[i]; i++) {
+            if (row.getAttribute('orderState')==0) {
+                var orderTr = document.createElement('tr');
+                var station = row.getAttribute('stationID');
+                var type = row.getAttribute('typeID');
+                var rem = row.getAttribute('volRemaining');
+                var vol = rem+'/'+row.getAttribute('volEntered');
+                var price = row.getAttribute('price');
+                var dur = differenceDates(orderExpire(row.getAttribute('issued'),row.getAttribute('duration')),0)[4];
+                var issued = row.getAttribute('issued');
+                var summ = Math.round(price*rem);
+                total = summ+total;
+                sIds = distinctAdd(sIds,station);
+                tIds = distinctAdd(tIds,type);
+                orderTr.innerHTML = '<td class=\'s'+station+'\'></td><td class=\'t'+type+'\'></td><td>'+vol+'</td><td>'+delim(summ)+'</td><td>'+dur+'</td>';
+                document.getElementById('ordersList').appendChild(orderTr);
+            }
+
         }
-
+        id2types(tIds);
+        id2stNames(sIds);
+        document.getElementById('ordersSumm').innerText = delim(total);
     }
-    id2types(tIds);
-    id2stNames(sIds);
-    document.getElementById('ordersSumm').innerText = delim(total);
 
 
 }
