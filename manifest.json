@@ -1,0 +1,22 @@
+{
+   "background": {
+      "page": "background.html"
+   },
+   "browser_action": {
+      "default_icon": "icon.png",
+      "default_popup": "popup.html",
+      "default_title": "EveCM"
+   },
+   "content_security_policy": "script-src 'self'  https://api.eveonline.com; object-src 'self' ",
+   "description": "Eve-online character monitoring(skills,queue,orders)",
+   "icons": {
+      "128": "icon128.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDP+AkNdjCAxqbzeN/kaWbqjzgvOfw4NBmr2OeTmsJxuh2Zbk4kd5vQJIxlnhT+InpSJUJx5WxFtP+ueHfLCUgiu0L7L7C7ZkXBLw+/LRKjXiNdf4gBlP23CEKKCnb+62Ms6L+UHcCAPedcu6Y0x02swnq+obE3A1vTKbcNi7lcawIDAQAB",
+   "manifest_version": 2,
+   "name": "EveCM",
+   "options_page": "options.html",
+   "permissions": [ "https://api.eveonline.com/", "notifications" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "0.8.1"
+}

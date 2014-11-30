@@ -1,0 +1,189 @@
+body {
+  min-width:357px;
+
+  overflow-x:hidden;
+  background:#313131;
+  color:white;
+  font-family: Arial, Helvetica, sans-serif;
+
+}
+font {
+    font-size: 10px;
+    color: white;
+}
+body, html {
+    float: left;
+}
+a {
+    color: white;
+}
+tr.info {
+     font-size: 11px;
+}
+#idListeSkillsConnus table,#idSkillInTraining table,#count table{
+    width:98%;
+    border-collapse: collapse;
+}
+
+#idListeSkillsConnus table tbody tr td,#count table tbody tr td{
+    border: 1px black solid;
+
+}
+
+#idSkillInTraining table tbody tr td,#count table tbody tr td{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    border: 1px black solid;
+}
+
+#idListeSkillsConnus table tbody tr th,#count table tbody tr th{
+    text-align:left;
+
+}
+th.header {
+    background:#424242 url(img/vertNavInactiveBG.jpg);
+    height: 20px;
+    font: normal normal normal 100%/normal Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding-left: 5px;
+}
+th#unread {
+    background: #83aafb;
+}
+#mailTitle {
+    font: normal normal normal 100%/normal Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+th.header:hover {
+    background:#636363 url(img/vertNavActiveBG.jpg);
+    cursor:pointer;
+}
+td.skillName{
+padding-left: 30px;
+ font-size: 11px;
+}
+td.skillLv {
+    width:50px;
+}
+
+tr.nd {
+    display:none;
+}
+
+span.spsumm{
+    color: #FA9E0E;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    padding-left:4px;
+}
+
+div.progress {
+    width: 46px;
+    height:2px;
+    margin-top: 2px;
+    border: 1px solid #818184;
+
+}
+
+td.queueTime {
+    margin: 1px;
+    width: 90px;
+}
+td.queueInfo {
+    margin: 0;
+    width: 46px;
+}
+
+ul.tabs {
+	margin: 0;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 20px; /*--Set height of tabs--*/
+	border-bottom: 1px solid #757575;
+	border-left: 1px solid #757575;
+	width: 100%;
+}
+ul.tabs li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 19px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 19px; /*--Vertically aligns the text within the tab--*/
+	border: 1px solid #757575;
+	border-left: none;
+	margin-bottom: -1px; /*--Pull the list item down 1px--*/
+	overflow: hidden;
+	position: relative;
+	background: #636363;
+}
+ul.tabs li a {
+	text-decoration: none;
+	color: #FFF;
+	display: block;
+	font-size: 10px;
+	padding: 0 20px;
+	border: 1px solid #757575; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	outline: none;
+}
+ul.tabs li a:hover {
+	background: #424242;
+}
+html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #313131;
+	border-bottom: 1px solid #313131; /*--Makes the active tab look like it's connected with its content--*/
+}
+
+.tab_container {
+
+	border-top: none;
+	overflow: hidden;
+	clear: both;
+	float: left; width: 100%;
+	background: #313131;
+}
+.tab_content {
+	padding: 3px;
+}
+
+#ordersList {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    border-collapse:collapse;
+    width: 97%;
+
+}
+
+#ordersList tbody tr td {
+
+    border: 1px solid black;
+    border-collapse:collapse;
+
+}
+
+#summCont {
+font-family: Arial, Helvetica, sans-serif;
+font-size: 10px;
+    position:relative;
+    left:30;
+
+}
+#serverOn{
+    color:#66FF33;
+}
+#serverOff {
+    color: red;
+}
+#PLEX {
+	color:#FFCC33;
+}
+#last {
+    width:97%;
+    text-align: center;
+    background-color: rgba(153,204,255,1);
+}
