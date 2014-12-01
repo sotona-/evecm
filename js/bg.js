@@ -18,9 +18,12 @@ var reqSkillInTraining = new XMLHttpRequest();
 var skillQueue = new XMLHttpRequest();
 var ordersList = new XMLHttpRequest();
 <<<<<<< HEAD
+<<<<<<< HEAD
 var mailMessages = new XMLHttpRequest();
 var serverStatus = new XMLHttpRequest();
 var paidUntil = new XMLHttpRequest();
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 var vcode = localStorage["vcode"];
@@ -40,12 +43,15 @@ function init() {
     ordersList.onload = drawOrders;
     ordersList.send(null);
 <<<<<<< HEAD
+<<<<<<< HEAD
     mailMessages.open("GET", apiserver + "/char/MailMessages.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
     mailMessages.onload = mailList;
     mailMessages.send(null);
     paidUntil.open("GET", apiserver + "/account/AccountStatus.xml.aspx?keyID=" + keyid + "&vCode=" + vcode, true);
     paidUntil.onload = accountStatus;
     paidUntil.send(null);
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     //id2name('1,2');
@@ -217,7 +223,10 @@ function recupInfosPerso() {
     var corpName = reqCharacterSheet.responseXML.getElementsByTagName("corporationName")[0].textContent;
     var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
 <<<<<<< HEAD
+<<<<<<< HEAD
         if ((allyName == undefined) || (allyName == ''))  { allyName = 'none';};
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     var rowsetList = reqCharacterSheet.responseXML.getElementsByTagName("rowset");
@@ -431,7 +440,11 @@ function id2stNames(ids) {
     var npcS = new XMLHttpRequest();
     var pcS = conqStationsDoc.getElementsByTagName('row');
 <<<<<<< HEAD
+<<<<<<< HEAD
     npcS.open("GET","res/npcStations.xml", false);
+=======
+    npcS.open("GET","/res/npcStations.xml", false);
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
     npcS.open("GET","/res/npcStations.xml", false);
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
@@ -472,6 +485,7 @@ function distinctAdd(arr,val) {
     if (has==0) arr.push(val);
     return arr;
 }
+<<<<<<< HEAD
 <<<<<<< HEAD
 // start mail
 function mailList() {
@@ -632,8 +646,13 @@ if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
     
 =======
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 
 
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
+<<<<<<< HEAD
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
+=======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c

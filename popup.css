@@ -8,6 +8,7 @@ body {
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 font {
     font-size: 10px;
     color: white;
@@ -23,18 +24,27 @@ tr.info {
 }
 #idListeSkillsConnus table,#idSkillInTraining table,#count table{
 =======
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 
 tr.info {
      font-size: 11px;
 }
 #idListeSkillsConnus table,#idSkillInTraining table {
+<<<<<<< HEAD
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
+=======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     width:98%;
     border-collapse: collapse;
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #idListeSkillsConnus table tbody tr td,#count table tbody tr td{
+=======
+#idListeSkillsConnus table tbody tr td {
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 #idListeSkillsConnus table tbody tr td {
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
@@ -43,7 +53,11 @@ tr.info {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #idSkillInTraining table tbody tr td,#count table tbody tr td{
+=======
+#idSkillInTraining table tbody tr td {
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 #idSkillInTraining table tbody tr td {
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
@@ -53,7 +67,11 @@ tr.info {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 #idListeSkillsConnus table tbody tr th,#count table tbody tr th{
+=======
+#idListeSkillsConnus table tbody tr th {
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 #idListeSkillsConnus table tbody tr th {
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
@@ -70,6 +88,7 @@ th.header {
     padding-left: 5px;
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 th#unread {
     background: #83aafb;
 }
@@ -81,6 +100,10 @@ th#unread {
 }
 th.header:hover {
     background:#636363 url(img/vertNavActiveBG.jpg);
+=======
+th.header:hover {
+    background:#636363 url(img/vertNavActiveBG.jpg);;
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 th.header:hover {
     background:#636363 url(img/vertNavActiveBG.jpg);;
@@ -181,7 +204,10 @@ html ul.tabs li.active, html ul.tabs li.active a:hover  { /*--Makes sure that th
     font-size: 10px;
     border-collapse:collapse;
 <<<<<<< HEAD
+<<<<<<< HEAD
     width: 97%;
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 
@@ -202,6 +228,7 @@ font-size: 10px;
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 #serverOn{
     color:#66FF33;
 }
@@ -216,5 +243,7 @@ font-size: 10px;
     text-align: center;
     background-color: rgba(153,204,255,1);
 }
+=======
+>>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 =======
 >>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
