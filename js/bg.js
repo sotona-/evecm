@@ -17,18 +17,9 @@ var reqCharacterSheet = new XMLHttpRequest();
 var reqSkillInTraining = new XMLHttpRequest();
 var skillQueue = new XMLHttpRequest();
 var ordersList = new XMLHttpRequest();
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 var mailMessages = new XMLHttpRequest();
 var serverStatus = new XMLHttpRequest();
 var paidUntil = new XMLHttpRequest();
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 var vcode = localStorage["vcode"];
 var keyid = localStorage["keyid"];
 var characterid = localStorage["characterid"];
@@ -45,21 +36,12 @@ function init() {
     ordersList.open("GET", apiserver + "/char/MarketOrders.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
     ordersList.onload = drawOrders;
     ordersList.send(null);
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     mailMessages.open("GET", apiserver + "/char/MailMessages.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
     mailMessages.onload = mailList;
     mailMessages.send(null);
     paidUntil.open("GET", apiserver + "/account/AccountStatus.xml.aspx?keyID=" + keyid + "&vCode=" + vcode, true);
     paidUntil.onload = accountStatus;
     paidUntil.send(null);
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     //id2name('1,2');
     window.setTimeout(function(){ window.location.reload() },600000);
 }
@@ -228,16 +210,7 @@ function recupInfosPerso() {
     var balance = reqCharacterSheet.responseXML.getElementsByTagName("balance")[0].textContent;
     var corpName = reqCharacterSheet.responseXML.getElementsByTagName("corporationName")[0].textContent;
     var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if ((allyName == undefined) || (allyName == ''))  { allyName = 'none';};
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
+        if ((allyName == undefined) || (allyName == ''))  { allyName = 'none';}
     var rowsetList = reqCharacterSheet.responseXML.getElementsByTagName("rowset");
     var rowsetSkillsElement;
 
@@ -448,19 +421,7 @@ function id2stNames(ids) {
     var sysRe = /^\S+\s\S+/;
     var npcS = new XMLHttpRequest();
     var pcS = conqStationsDoc.getElementsByTagName('row');
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     npcS.open("GET","res/npcStations.xml", false);
-=======
-    npcS.open("GET","/res/npcStations.xml", false);
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
-    npcS.open("GET","/res/npcStations.xml", false);
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
-    npcS.open("GET","/res/npcStations.xml", false);
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     npcS.onload = function() {
 
         var   res = npcS.responseXML;
@@ -498,9 +459,7 @@ function distinctAdd(arr,val) {
     if (has==0) arr.push(val);
     return arr;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 // start mail
 function mailList() {
    var rows = mailMessages.responseXML.getElementsByTagName('row').length;
@@ -654,24 +613,7 @@ function accountStatus() {
 
     
 }
-//end
-
-if (document.addEventListener)
-    document.addEventListener("DOMContentLoaded", init, false);
-    
-=======
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 
 
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
