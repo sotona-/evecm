@@ -17,15 +17,6 @@ var reqCharacterSheet = new XMLHttpRequest();
 var reqSkillInTraining = new XMLHttpRequest();
 var skillQueue = new XMLHttpRequest();
 var ordersList = new XMLHttpRequest();
-<<<<<<< HEAD
-<<<<<<< HEAD
-var mailMessages = new XMLHttpRequest();
-var serverStatus = new XMLHttpRequest();
-var paidUntil = new XMLHttpRequest();
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 var vcode = localStorage["vcode"];
 var keyid = localStorage["keyid"];
 var characterid = localStorage["characterid"];
@@ -42,18 +33,6 @@ function init() {
     ordersList.open("GET", apiserver + "/char/MarketOrders.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
     ordersList.onload = drawOrders;
     ordersList.send(null);
-<<<<<<< HEAD
-<<<<<<< HEAD
-    mailMessages.open("GET", apiserver + "/char/MailMessages.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
-    mailMessages.onload = mailList;
-    mailMessages.send(null);
-    paidUntil.open("GET", apiserver + "/account/AccountStatus.xml.aspx?keyID=" + keyid + "&vCode=" + vcode, true);
-    paidUntil.onload = accountStatus;
-    paidUntil.send(null);
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     //id2name('1,2');
     window.setTimeout(function(){ window.location.reload() },600000);
 }
@@ -221,14 +200,8 @@ function recupInfosPerso() {
     var name = reqCharacterSheet.responseXML.getElementsByTagName("name")[0].textContent;
     var balance = reqCharacterSheet.responseXML.getElementsByTagName("balance")[0].textContent;
     var corpName = reqCharacterSheet.responseXML.getElementsByTagName("corporationName")[0].textContent;
-    var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
-<<<<<<< HEAD
-<<<<<<< HEAD
-        if ((allyName == undefined) || (allyName == ''))  { allyName = 'none';};
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
+    var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0];
+        if (allyName == undefined) { allyName = 'none';};
     var rowsetList = reqCharacterSheet.responseXML.getElementsByTagName("rowset");
     var rowsetSkillsElement;
 
@@ -439,15 +412,7 @@ function id2stNames(ids) {
     var sysRe = /^\S+\s\S+/;
     var npcS = new XMLHttpRequest();
     var pcS = conqStationsDoc.getElementsByTagName('row');
-<<<<<<< HEAD
-<<<<<<< HEAD
     npcS.open("GET","res/npcStations.xml", false);
-=======
-    npcS.open("GET","/res/npcStations.xml", false);
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
-    npcS.open("GET","/res/npcStations.xml", false);
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     npcS.onload = function() {
 
         var   res = npcS.responseXML;
@@ -485,174 +450,7 @@ function distinctAdd(arr,val) {
     if (has==0) arr.push(val);
     return arr;
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-// start mail
-function mailList() {
-   var rows = mailMessages.responseXML.getElementsByTagName('row').length;
-   var mailLists = [];
-   var j = 0;
-   for (var i=0; i<rows; i++){
-        if (mailMessages.responseXML.getElementsByTagName('row')[i].getAttribute('senderID') !== characterid){
-            mailLists[j] = mailMessages.responseXML.getElementsByTagName('row')[i];
-            j++
-        }
-   }
-
-    function sortBubble(mailLists) {
-        var p = true;
-        var tmp;
-        while (p == true) {
-             p = false;
-                for (var i = 0; i < mailLists.length-1; i++) {
-                     var a = new Date(mailLists[i].getAttribute('sentDate'));
-                     var b = new Date(mailLists[i+1].getAttribute('sentDate'));
-                        if ( a < b) {
-                            tmp = mailLists[i];
-                            mailLists[i] = mailLists[i+1];
-                            mailLists[i+1] = tmp;
-                            p = true;
-                        }
-                 }
-            }
-        return mailLists;
-        }
-    sortBubble(mailLists);
-    
-    if (mailLists.length > 10) {
-        var mailsAmount = 10;
-    } else {
-        var mailsAmount = mailLists.length;
-    }
-    
-    if (localStorage["lastMail"] == undefined){
-        localStorage['lastMail'] = mailLists[0].getAttribute('sentDate'); 
-        var lastMail = mailLists[0].getAttribute('sentDate');    
-    } else {
-        var lastMail = localStorage['lastMail'];
-    }
-    if(mailLists == 0) {
-            var noMail = document.createElement('span');
-            noMail.innerText = 'Have no mail';
-            document.getElementById('count').appendChild(noMail);
-    }
-    for (var i=0; i<mailsAmount; i++){
-        var mailID = mailLists[i].getAttribute('messageID');
-        var echoinf = document.createElement('th');
-        var table = document.createElement('table');
-        var tr = document.createElement('tr');
-        var sendDate = document.createElement('span');
-        var trMailBody = document.createElement('tr');
-        var tdMailTitle = document.createElement('td')
-        var mailTitle = document.createElement('span')
-        var toName = document.createElement('span');
-        var name;
-        var mailBody = document.createElement('span');
-        var bodyText;
-        var bodyStr;
-        
-        echoinf.setAttribute('id',mailID);
-        echoinf.setAttribute('class','header');
-        if (mailLists[i].getAttribute('sentDate') > lastMail) {
-            echoinf.setAttribute('id','unread');
-            chrome.browserAction.setIcon({
-                path: "iconUnreadMail.png"
-            });
-            
-        }
-
-        echoinf.innerText = 'Sender: ' + mailLists[i].getAttribute('senderName');
-        
-        trMailBody.setAttribute('class', 'skill nd');
-        
-        mailTitle.setAttribute('id','mailTitle');
-        
-        if (mailLists[i].getAttribute('toCharacterIDs') == '') {
-            var to = mailLists[i].getAttribute('toCorpOrAllianceID');
-        } else {
-            var to = mailLists[i].getAttribute('toCharacterIDs');
-        }
-        var toID = new XMLHttpRequest ()
-        toID.open('GET', 'https://api.eveonline.com/eve/CharacterName.xml.aspx?ids=' + to, false);
-        toID.onload = (function () { 
-            name = toID.responseXML.getElementsByTagName('row')[0].getAttribute('name');
-            return name;
-            
-            
-        });
-        toID.send(null);
-        
-        var mailR = new XMLHttpRequest ();
-        mailR.open('GET', "https://api.eveonline.com/char/MailBodies.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode + "&ids=" + mailID , false);
-        mailR.onload = (function () {
-           bodyText = mailR.responseXML.getElementsByTagName("row")[0].childNodes[0].nodeValue;
-           return bodyText;
-
-        });
-        mailR.send(null);
-        
-        sendDate.setAttribute('class','time');
-        
-        tdMailTitle.appendChild(mailTitle).innerText = mailLists[i].getAttribute('title');
-        tdMailTitle.appendChild(sendDate).innerHTML = '<br>' + mailLists[i].getAttribute('sentDate');
-        tdMailTitle.appendChild(toName).innerHTML = '<br>To: ' + name;
-        tdMailTitle.appendChild(mailBody).innerHTML = '<br><br>' + bodyText;
-        tdMailTitle.setAttribute('class', 'skillName');
-
-
-        
-        trMailBody.appendChild(tdMailTitle);
-        
-        
-        document.getElementById('mail').appendChild(table).appendChild(tr).appendChild(echoinf).appendChild(trMailBody);
-        
-
-        
-        }
-}
-//end mail
-//start account and server statuses
-function accountStatus() {
-    var currentTimeS = paidUntil.responseXML.getElementsByTagName('currentTime')[0].textContent;
-    var paidS = paidUntil.responseXML.getElementsByTagName('paidUntil')[0].textContent;
-    var currentTime = new Date(currentTimeS);
-    var paid = new Date(paidS);
-    var daysToExpire = Math.floor((paid - currentTime )/ (24 * 60 * 60 * 1000));
-    var hoursToExpire = Math.floor(((paid - currentTime ) - (daysToExpire*24*60*60*1000))/(60*60*1000) )
-    var timeSpan = document.createElement('span');
-    var serverStatusS;
-    serverStatus.open("GET", apiserver + "/server/ServerStatus.xml.aspx", false);
-    serverStatus.onload = (function (){
-        var serverOpen = serverStatus.responseXML.getElementsByTagName('serverOpen')[0].textContent;
-        if (serverOpen == 'True') {
-            var players = serverStatus.responseXML.getElementsByTagName('onlinePlayers')[0].textContent;
-            serverStatusS = '<span id="serverOn">Online </span>' + players + ' players';
-        } else {
-            serverStatusS = '<span id="serverOff">Offline</span>';
-        }
-        return serverStatusS;
-    });
-    serverStatus.send(null);
-    
-    
-    timeSpan.innerHTML = '<span id="PLEX">PLEX </span>will expire after: ' + daysToExpire +'d ' + hoursToExpire + 'h; ' + serverStatusS;
-    document.getElementById('status').appendChild(timeSpan);
-
-    
-}
-//end
-
-if (document.addEventListener)
-    document.addEventListener("DOMContentLoaded", init, false);
-    
-=======
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 
 
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
-<<<<<<< HEAD
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c

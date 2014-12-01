@@ -1,51 +1,15 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-
 var queueTrList = [];
 
 function init() {
-    if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
-=======
-var queueTrList = [];
-
-function init() {
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
-var queueTrList = [];
-
-function init() {
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     var res = chrome.extension.getBackgroundPage().document.getElementById('main');
     document.getElementById('i').innerHTML = res.innerHTML;
     $("th.header").live('click', function(){
            $(this).parent().parent().find('tr.skill').toggleClass("nd");
-<<<<<<< HEAD
-<<<<<<< HEAD
-           if ($(this).is('#unread')) {
-                $(this).attr('id','read');
-                    chrome.browserAction.setIcon({
-                        path: "icon.png"
-                    });  
-                    localStorage['lastMail'] = $(this).parent().parent().find('tr.skill').find('td.skillName').find('span.time').text();             
-                
-           }
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
     });
     var queueDiv = document.getElementById('idSkillInTraining');
     queueTrList = queueDiv.getElementsByTagName('tr');
     updateCounters();
     initTabs();
-<<<<<<< HEAD
-<<<<<<< HEAD
-} else 
-    document.getElementById('i').innerHTML = 'invalid vCode or keyID <br> <a target="_blank" href="chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html">Open Settings</a>';
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
-=======
->>>>>>> 06f74e114a1f12f6538956e5bec594a8bf78454c
 }
 
 function updateCounters() {
