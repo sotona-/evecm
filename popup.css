@@ -115,7 +115,45 @@ td.queueInfo {
     margin: 0;
     width: 46px;
 }
-
+/*------------------------------------------------------------------style of mail tabs --*/
+ul.mailtabs {
+  	margin: 0;
+	padding: 0;
+	width: 100%;
+	list-style: none;
+	height: 20px;  
+}
+ul.mailtabs li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 19px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 19px; /*--Vertically aligns the text within the tab--*/
+	border: 1px solid #757575;
+	border-left: none;
+	margin-bottom: -1px; /*--Pull the list item down 1px--*/
+	overflow: hidden;
+	position: relative;
+	background: #636363;
+    width: 32%;
+}
+ul.mailtabs li a {
+	text-decoration: none;
+	color: #FFF;
+	display: block;
+	font-size: 10px;
+	padding: 0 20px;
+	border: 1px solid #757575; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	outline: none;
+}
+ul.mailtabs li a:hover {
+	background: #424242;
+}
+ul.mailtabs li.active, ul.mailtabs li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #313131;
+	border-bottom: 1px solid #313131;
+ }
+/*----------------------------------------------------end of mail tabs style */
 ul.tabs {
 	margin: 0;
 	padding: 0;

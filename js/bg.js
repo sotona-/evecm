@@ -462,45 +462,68 @@ function distinctAdd(arr,val) {
 
 // start mail
 function mailList() {
+    
+   var nameOfMailing = [];
+   var valueOfMailing;
+   var MailingReq = new XMLHttpRequest;
+   MailingReq.open('GET', "https://api.eveonline.com/char/mailinglists.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode , false);
+   MailingReq.onload = (function () {
+           var valueOfMailing = MailingReq.responseXML.getElementsByTagName('row').length;
+           for (var i=0; i<valueOfMailing; i++){
+                nameOfMailing[i] = MailingReq.responseXML.getElementsByTagName('row')[i]; 
+           }
+           return valueOfMailing;
+           return nameOfMailing;
+
+        });
+   MailingReq.send(null);
+   
    var rows = mailMessages.responseXML.getElementsByTagName('row').length;
    var mailLists = [];
-   var j = 0;
+   var fromCorpAlliMails = [];
+   var NotSortedMailList = [];
+   var j = 0;     
    for (var i=0; i<rows; i++){
-        if (mailMessages.responseXML.getElementsByTagName('row')[i].getAttribute('senderID') !== characterid){
-            mailLists[j] = mailMessages.responseXML.getElementsByTagName('row')[i];
-            j++
+        if (mailMessages.responseXML.getElementsByTagName('row')[i].getAttribute('senderID') !== characterid) {
+        NotSortedMailList[j] = mailMessages.responseXML.getElementsByTagName('row')[i];
+        j++;
         }
    }
-
-    function sortBubble(mailLists) {
+   
+   function sortBubbleMail(NotSortedMailList) {
         var p = true;
         var tmp;
         while (p == true) {
              p = false;
-                for (var i = 0; i < mailLists.length-1; i++) {
-                     var a = new Date(mailLists[i].getAttribute('sentDate'));
-                     var b = new Date(mailLists[i+1].getAttribute('sentDate'));
+                for (var i = 0; i < NotSortedMailList.length-1; i++) {
+                     var a = new Date(NotSortedMailList[i].getAttribute('sentDate'));
+                     var b = new Date(NotSortedMailList[i+1].getAttribute('sentDate'));
                         if ( a < b) {
-                            tmp = mailLists[i];
-                            mailLists[i] = mailLists[i+1];
-                            mailLists[i+1] = tmp;
+                            tmp = NotSortedMailList[i];
+                            NotSortedMailList[i] = NotSortedMailList[i+1];
+                            NotSortedMailList[i+1] = tmp;
                             p = true;
                         }
                  }
             }
-        return mailLists;
+        return NotSortedMailList;
         }
-    sortBubble(mailLists);
+   sortBubbleMail(NotSortedMailList);
+   for (var i=0; i<rows; i++){
+        mailLists[i] = NotSortedMailList[i];
+
+   }
     
-    if (mailLists.length > 10) {
-        var mailsAmount = 10;
+    if (mailLists.length > 20) {
+        var mailsAmount = 20;
     } else {
         var mailsAmount = mailLists.length;
     }
+
     
     if (localStorage["lastMail"] == undefined){
-        localStorage['lastMail'] = mailLists[0].getAttribute('sentDate'); 
-        var lastMail = mailLists[0].getAttribute('sentDate');    
+        localStorage['lastMail'] = NotSortedMailList[0].getAttribute('sentDate'); 
+        var lastMail = NotSortedMailList[0].getAttribute('sentDate');    
     } else {
         var lastMail = localStorage['lastMail'];
     }
@@ -523,6 +546,21 @@ function mailList() {
         var mailBody = document.createElement('span');
         var bodyText;
         var bodyStr;
+        var unreadOfType1;
+        var unreadOfType2;
+        var unreadOfType3;
+        var toCharacterIDs = mailLists[i].getAttribute('toCharacterIDs');
+        var toCorpOrAllianceID = mailLists[i].getAttribute('toCorpOrAllianceID');
+        var toListID = mailLists[i].getAttribute('toListID');
+
+        
+        if ((toCharacterIDs !== '') && (toCorpOrAllianceID == '')){
+           var typeOfMessage = 1;     
+        } else if (toCorpOrAllianceID !== undefined) { 
+           var typeOfMessage = 2;
+        } else if (toListID !== '') {
+           var typeOfMessage = 3; 
+        } 
         
         echoinf.setAttribute('id',mailID);
         echoinf.setAttribute('class','header');
@@ -530,30 +568,42 @@ function mailList() {
             echoinf.setAttribute('id','unread');
             chrome.browserAction.setIcon({
                 path: "iconUnreadMail.png"
+
             });
+
             
         }
 
-        echoinf.innerText = 'Sender: ' + mailLists[i].getAttribute('senderName');
+
+        echoinf.innerText = 'Sender: ' + mailLists[i].getAttribute('senderName') + typeOfMessage;
         
         trMailBody.setAttribute('class', 'skill nd');
         
         mailTitle.setAttribute('id','mailTitle');
         
-        if (mailLists[i].getAttribute('toCharacterIDs') == '') {
+        if (mailLists[i].getAttribute('toCorpOrAllianceID') !== '') {
             var to = mailLists[i].getAttribute('toCorpOrAllianceID');
         } else {
             var to = mailLists[i].getAttribute('toCharacterIDs');
         }
         var toID = new XMLHttpRequest ()
-        toID.open('GET', 'https://api.eveonline.com/eve/CharacterName.xml.aspx?ids=' + to, false);
-        toID.onload = (function () { 
-            name = toID.responseXML.getElementsByTagName('row')[0].getAttribute('name');
-            return name;
-            
-            
-        });
-        toID.send(null);
+        if ((typeOfMessage == 1) || (typeOfMessage == 2)){
+                     toID.open('GET', 'https://api.eveonline.com/eve/CharacterName.xml.aspx?ids=' + to, false);
+                     toID.onload = (function () { 
+                     name = toID.responseXML.getElementsByTagName('row')[0].getAttribute('name');
+                     return name;
+                     })
+                     toID.send(null);
+
+        } else if (typeOfMessage == 3){
+                     for (i=0;i<valueOfMailing;i++){
+                        if (nameOfMailing[i].getAttribute('ListID') == mailLists.getAttribute('toListID')){
+                            name = nameOfMailing[i].getAttribute('displayName');
+                        }
+                     }            
+        }
+        
+
         
         var mailR = new XMLHttpRequest ();
         mailR.open('GET', "https://api.eveonline.com/char/MailBodies.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode + "&ids=" + mailID , false);
@@ -576,12 +626,15 @@ function mailList() {
         
         trMailBody.appendChild(tdMailTitle);
         
+
         
         document.getElementById('mail').appendChild(table).appendChild(tr).appendChild(echoinf).appendChild(trMailBody);
         
 
         
         }
+        
+ 
 }
 //end mail
 //start account and server statuses

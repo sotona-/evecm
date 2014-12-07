@@ -67,6 +67,23 @@ function initTabs() {
 		$(activeTab).show(); //Fade in the active ID content
 		return false;
 	});
+    
+        //When page loads...
+	$(".mail_content").hide(); //Hide all content
+	$("ul.mailtabs li:first").addClass("active").show(); //Activate first tab
+	$(".mail_content:first").show(); //Show first tab content
+
+	//On Click Event
+	$("ul.mailtabs li").click(function() {
+
+		$("ul.mailtabs li").removeClass("active"); //Remove any "active" class
+		$(this).addClass("active"); //Add "active" class to selected tab
+		$(".mail_content").hide(); //Hide all tab content
+
+		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+		$(activeTab).show(); //Fade in the active ID content
+		return false;
+	});
 }
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
