@@ -43,6 +43,29 @@ function restore_options() {
   showXml();
   showKeyInfo(keyMask,keyType);
 }
+function updateXml () {
+    var d = new Date();
+    var skills = new XMLHttpRequest();
+    var stations = new XMLHttpRequest();
+    var callList = new XMLHttpRequest();
+    stations.open("GET", "https://api.eveonline.com/eve/ConquerableStationList.xml.aspx", true);
+    skills.open("GET", "https://api.eveonline.com/eve/SkillTree.xml.aspx", true);
+    callList.open("GET", "https://api.eveonline.com/api/CallList.xml.aspx", true);
+    stations.send(null);
+
+    stations.onload = function (){
+        localStorage['conqStations'] = stations.responseText;
+        skills.send(null);
+    }
+    skills.onload = function (){
+        localStorage['skills'] = skills.responseText;
+        callList.send(null);
+    }
+    callList.onload = function(){
+        localStorage['callList'] = callList.responseText;
+        localStorage['lastUpdate'] = d.toLocaleString();
+    }
+}
 
 
 
@@ -72,33 +95,12 @@ var req = new XMLHttpRequest();
 
 }
 
-function updateXml () {
-    var d = new Date();
-    var skills = new XMLHttpRequest();
-    var stations = new XMLHttpRequest();
-    var callList = new XMLHttpRequest();
-    stations.open("GET", "https://api.eveonline.com/eve/ConquerableStationList.xml.aspx", true);
-    skills.open("GET", "https://api.eveonline.com/eve/SkillTree.xml.aspx", true);
-    callList.open("GET", "https://api.eveonline.com/api/CallList.xml.aspx", true);
-    stations.send(null);
-
-    stations.onload = function (){
-        localStorage['conqStations'] = stations.responseText;
-        skills.send(null);
-    }
-    skills.onload = function (){
-        localStorage['skills'] = skills.responseText;
-        callList.send(null);
-    }
-    callList.onload = function(){
-        localStorage['callList'] = callList.responseText;
-        localStorage['lastUpdate'] = d.toLocaleString();
-        showXml();
-    }
 
 
 
-}
+
+
+
 
 function showXml() {
     if (localStorage['lastUpdate']!=='')  {
@@ -148,8 +150,9 @@ function showKeyInfo(mask,type) {
 
 document.addEventListener("DOMContentLoaded", function(){
     restore_options();
+    updateXml();
     document.getElementById("get_chars").addEventListener("click", get_chars);
-    document.getElementById("update_xml").addEventListener("click", updateXml);
+
     document.getElementById("save_options").addEventListener("click", save_options);
 });
 

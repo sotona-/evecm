@@ -1,7 +1,9 @@
+if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
 var queueTrList = [];
+var unreadArr = JSON.parse(localStorage['unreadArr']);
 
 function init() {
-    if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
+    
     var res = chrome.extension.getBackgroundPage().document.getElementById('main');
     document.getElementById('i').innerHTML = res.innerHTML;
     $("th.header").live('click', function(){
@@ -9,23 +11,52 @@ function init() {
 
            if ($(this).is('#unread')) {
                 $(this).attr('id','read');
+
+                var messageID = $(this).attr('messid');
+                var tof = $(this).attr('tof');
+                delete unreadArr[messageID];
+                localStorage.unreadArr = JSON.stringify(unreadArr);
+                var amountOfUnread = parseInt(document.getElementById('unread'+tof).textContent);
+                $('span#unread'+tof).html(amountOfUnread-1);
+                localStorage['unread'+tof] = amountOfUnread-1; 
+                if ((localStorage['unread1'] == 0) && (localStorage['unread2'] == 0) && (localStorage['unread3'] == 0)) {
                     chrome.browserAction.setIcon({
                         path: "icon.png"
-                    });  
-                    localStorage['lastMail'] = $(this).parent().parent().find('tr.skill').find('td.skillName').find('span.time').text();             
-                
+                    });                     
+                                    
+                }
            }
+
+    });
+    $('div#markAllAsRead').live('click', function(){
+        $('th#unread').each(function(){
+            $(this).attr('id','read');
+           
+            
+        });
+        $('span#unread1').html('0');
+        $('span#unread2').html('0');
+        $('span#unread3').html('0');
+        localStorage['unread1'] = 0;
+        localStorage['unread2'] = 0; 
+        localStorage['unread3'] = 0;  
+        chrome.browserAction.setIcon({
+            path: "icon.png"
+        }); 
+        unreadArr = {};
+        localStorage.unreadArr = JSON.stringify(unreadArr);
+        var parentElement = document.getElementById('tab4');
+        var elementToRemove = document.getElementById('markAllAsRead');
+        parentElement.removeChild(elementToRemove);
 
     });
     var queueDiv = document.getElementById('idSkillInTraining');
     queueTrList = queueDiv.getElementsByTagName('tr');
     updateCounters();
     initTabs();
+    setUnread();
 
-} else {
-    document.getElementById('i').innerHTML = 'invalid vCode or keyID <br> <a target="_blank" href="chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html">Open Settings</a>';
 
-}
 }
 
 function updateCounters() {
@@ -85,5 +116,32 @@ function initTabs() {
 		return false;
 	});
 }
+function setUnread () {
+
+    $('th.header').each(function(){
+        var messageID = $(this).attr('messid');
+        if (unreadArr[messageID] == 'unread'){
+            $(this).attr('id','unread');
+        }
+        
+    });
+        document.getElementById('unread1').innerText = localStorage['unread1'];
+        document.getElementById('unread2').innerText = localStorage['unread2'];
+        document.getElementById('unread3').innerText = localStorage['unread3'];
+            if ((localStorage['unread1']>0)||(localStorage['unread2']>0)||(localStorage['unread3']>0)) {
+        var markAsRead = document.createElement('div');
+        var divToMark = document.getElementById('tab4');
+        markAsRead.setAttribute('id','markAllAsRead');
+        markAsRead.innerText = 'Mark all as read';
+        divToMark.appendChild(markAsRead);
+        chrome.browserAction.setIcon({
+            path: "iconUnreadMail.png"
+        }); 
+        }
+}
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
+} else {
+    var str = '<span>invalid vCode or keyID<span> <br> <a target="_blank" href="chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html">Open Settings</a>';
+    $(document).ready(function (){$('div#i').html(str);});
+}

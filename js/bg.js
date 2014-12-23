@@ -1,4 +1,7 @@
+
+if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
 var compteur = [];
+var mailLists = [];
 var digit_del = ",";
 var tabcouleurfind = new Array();
 var parser = new DOMParser();
@@ -468,13 +471,15 @@ function mailList() {
    var MailingReq = new XMLHttpRequest;
    MailingReq.open('GET', "https://api.eveonline.com/char/mailinglists.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode , false);
    MailingReq.onload = (function () {
-           var valueOfMailing = MailingReq.responseXML.getElementsByTagName('row').length;
+           valueOfMailing = MailingReq.responseXML.getElementsByTagName('row').length;
            for (var i=0; i<valueOfMailing; i++){
                 nameOfMailing[i] = MailingReq.responseXML.getElementsByTagName('row')[i]; 
+
            }
+
+           
            return valueOfMailing;
            return nameOfMailing;
-
         });
    MailingReq.send(null);
    
@@ -521,17 +526,40 @@ function mailList() {
     }
 
     
-    if (localStorage["lastMail"] == undefined){
-        localStorage['lastMail'] = NotSortedMailList[0].getAttribute('sentDate'); 
-        var lastMail = NotSortedMailList[0].getAttribute('sentDate');    
-    } else {
-        var lastMail = localStorage['lastMail'];
-    }
     if(mailLists == 0) {
             var noMail = document.createElement('span');
             noMail.innerText = 'Have no mail';
             document.getElementById('count').appendChild(noMail);
     }
+    if (localStorage['unread1'] != undefined){
+        var unreadOfType1 = localStorage['unread1'];        
+    } else {
+        var unreadOfType1 = 0;
+    }
+    if (localStorage['unread2'] != undefined){
+        var unreadOfType2 = localStorage['unread2'];        
+    } else {
+        var unreadOfType2 = 0;
+    }
+    if (localStorage['unread3'] != undefined){
+        var unreadOfType3 = localStorage['unread3'];        
+    } else {
+        var unreadOfType3 = 0;
+    }
+
+        
+
+
+    if (localStorage['unreadArr'] == undefined) {
+        var unreadArr = {};
+    } else {
+        var unreadArr = JSON.parse(localStorage['unreadArr']);
+    }
+
+    if (localStorage['tOfLastRM'] == undefined) {
+        localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
+    }
+//---------- MAIN MAIL SCRIPT----------------------//
     for (var i=0; i<mailsAmount; i++){
         var mailID = mailLists[i].getAttribute('messageID');
         var echoinf = document.createElement('th');
@@ -546,36 +574,25 @@ function mailList() {
         var mailBody = document.createElement('span');
         var bodyText;
         var bodyStr;
-        var unreadOfType1;
-        var unreadOfType2;
-        var unreadOfType3;
         var toCharacterIDs = mailLists[i].getAttribute('toCharacterIDs');
         var toCorpOrAllianceID = mailLists[i].getAttribute('toCorpOrAllianceID');
         var toListID = mailLists[i].getAttribute('toListID');
 
         
-        if ((toCharacterIDs !== '') && (toCorpOrAllianceID == '')){
-           var typeOfMessage = 1;     
-        } else if (toCorpOrAllianceID !== undefined) { 
-           var typeOfMessage = 2;
-        } else if (toListID !== '') {
-           var typeOfMessage = 3; 
-        } 
+
+if ((toCharacterIDs !== '') && (toCorpOrAllianceID == '')){
+var typeOfMessage = 1; 
+} else if (toCorpOrAllianceID !== '') { 
+var typeOfMessage = 2;
+} else if (toListID !== '') {
+var typeOfMessage = 3; 
+}
         
-        echoinf.setAttribute('id',mailID);
+        echoinf.setAttribute('messid',mailID);
         echoinf.setAttribute('class','header');
-        if (mailLists[i].getAttribute('sentDate') > lastMail) {
-            echoinf.setAttribute('id','unread');
-            chrome.browserAction.setIcon({
-                path: "iconUnreadMail.png"
+        echoinf.setAttribute('tof',typeOfMessage);
 
-            });
-
-            
-        }
-
-
-        echoinf.innerText = 'Sender: ' + mailLists[i].getAttribute('senderName') + typeOfMessage;
+        echoinf.innerText = 'Sender: ' + mailLists[i].getAttribute('senderName');
         
         trMailBody.setAttribute('class', 'skill nd');
         
@@ -596,9 +613,11 @@ function mailList() {
                      toID.send(null);
 
         } else if (typeOfMessage == 3){
-                     for (i=0;i<valueOfMailing;i++){
-                        if (nameOfMailing[i].getAttribute('ListID') == mailLists.getAttribute('toListID')){
-                            name = nameOfMailing[i].getAttribute('displayName');
+
+                     for (var mailI=0;mailI<valueOfMailing;mailI++){
+                        if (nameOfMailing[mailI].getAttribute('listID') == toListID){
+                            name = nameOfMailing[mailI].getAttribute('displayName');
+
                         }
                      }            
         }
@@ -628,13 +647,55 @@ function mailList() {
         
 
         
-        document.getElementById('mail').appendChild(table).appendChild(tr).appendChild(echoinf).appendChild(trMailBody);
+        document.getElementById('mail'+typeOfMessage).appendChild(table).appendChild(tr).appendChild(echoinf).appendChild(trMailBody);
         
 
-        
+        //----------set unread part--------------------//
+
+
+        var sentDate = mailLists[i].getAttribute('sentDate');
+        var tOfLastRM = localStorage['tOfLastRM'];
+        var messageID = mailLists[i].getAttribute('messageID');
+        if ((sentDate > tOfLastRM) && (unreadArr[messageID] == undefined)) {
+            unreadArr[messageID] = "unread";
+            switch (typeOfMessage) {
+            case 1: 
+                unreadOfType1++
+                break
+            case 2:
+                unreadOfType2++
+                break
+            case 3:
+                unreadOfType3++
+                break
+            
+                
+        } 
+        } 
+
+    
+    
+    if (unreadArr != undefined) {
+        localStorage.unreadArr = JSON.stringify(unreadArr);
+
+    }
+
+    
+  
         }
+//----------end of set unread part -------------//
+//----------END MAIN MAIL SCRIPT----------------------//   
+        localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
+
+        localStorage['unread1'] = unreadOfType1;
+        localStorage['unread2'] = unreadOfType2;
+        localStorage['unread3'] = unreadOfType3;
+
+
         
- 
+  
+
+
 }
 //end mail
 //start account and server statuses
@@ -665,8 +726,42 @@ function accountStatus() {
     document.getElementById('status').appendChild(timeSpan);
 
     
+    
+
+    
 }
+function updateXml () {
+    var d = new Date();
+    var skills = new XMLHttpRequest();
+    var stations = new XMLHttpRequest();
+    var callList = new XMLHttpRequest();
+    stations.open("GET", "https://api.eveonline.com/eve/ConquerableStationList.xml.aspx", true);
+    skills.open("GET", "https://api.eveonline.com/eve/SkillTree.xml.aspx", true);
+    callList.open("GET", "https://api.eveonline.com/api/CallList.xml.aspx", true);
+    stations.send(null);
+
+    stations.onload = function (){
+        localStorage['conqStations'] = stations.responseText;
+        skills.send(null);
+    }
+    skills.onload = function (){
+        localStorage['skills'] = skills.responseText;
+        callList.send(null);
+    }
+    callList.onload = function(){
+        localStorage['callList'] = callList.responseText;
+        localStorage['lastUpdate'] = d.toLocaleString();
+    }
+}
+updateXml();
+
+
 
 
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
+    
+} else {
+window.setTimeout(function(){ window.location.reload() },1000);
+}
+
