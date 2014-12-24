@@ -691,7 +691,11 @@ var typeOfMessage = 3;
         localStorage['unread2'] = unreadOfType2;
         localStorage['unread3'] = unreadOfType3;
 
-
+        if ((localStorage['unread1']>0)||(localStorage['unread2']>0)||(localStorage['unread3']>0)) {
+        chrome.browserAction.setIcon({
+            path: "iconUnreadMail.png"
+        }); 
+        }
         
   
 

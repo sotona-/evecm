@@ -22,7 +22,10 @@ function init() {
                 if ((localStorage['unread1'] == 0) && (localStorage['unread2'] == 0) && (localStorage['unread3'] == 0)) {
                     chrome.browserAction.setIcon({
                         path: "icon.png"
-                    });                     
+                    });
+                    var parentElement = document.getElementById('tab4');
+                    var elementToRemove = document.getElementById('markAllAsRead');
+                    parentElement.removeChild(elementToRemove);                     
                                     
                 }
            }
@@ -134,9 +137,6 @@ function setUnread () {
         markAsRead.setAttribute('id','markAllAsRead');
         markAsRead.innerText = 'Mark all as read';
         divToMark.appendChild(markAsRead);
-        chrome.browserAction.setIcon({
-            path: "iconUnreadMail.png"
-        }); 
         }
 }
 if (document.addEventListener)
