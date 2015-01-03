@@ -1,3 +1,11 @@
+if (localStorage['main'] == undefined){
+    localStorage['main'] = '1';
+}
+if (localStorage['char'+localStorage['main']] == undefined){
+    infoArr = {};
+} else {
+    infoArr = JSON.parse(localStorage['char'+localStorage['main']]);
+}
 function save_options() {
   localStorage["keyid"] = document.getElementById("kid").value;
   localStorage["vcode"] = document.getElementById("vcode").value;
@@ -5,6 +13,13 @@ function save_options() {
   localStorage["keyMask"] = document.getElementById("keyMask").innerText;
   localStorage["characterid"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].value;
   localStorage["charactername"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].innerHTML;
+  infoArr["keyid"] = document.getElementById("kid").value;
+  infoArr["vcode"] = document.getElementById("vcode").value;
+  infoArr["keyType"] = document.getElementById("keyType").innerText;
+  infoArr["keyMask"] = document.getElementById("keyMask").innerText;
+  infoArr["characterid"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].value;
+  infoArr["charactername"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].innerHTML;
+  
   if (document.getElementById('seconds').checked == true) {
       localStorage['seconds'] = 1000;
   } else{
@@ -16,6 +31,7 @@ function save_options() {
   setTimeout(function() {
     status.innerHTML = "";
   }, 750);
+  localStorage['char'+localStorage['main']] = JSON.stringify(infoArr);
 }
 
 // Restores select box state to saved value from localStorage.

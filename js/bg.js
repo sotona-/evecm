@@ -212,8 +212,11 @@ function recupInfosPerso() {
     var name = reqCharacterSheet.responseXML.getElementsByTagName("name")[0].textContent;
     var balance = reqCharacterSheet.responseXML.getElementsByTagName("balance")[0].textContent;
     var corpName = reqCharacterSheet.responseXML.getElementsByTagName("corporationName")[0].textContent;
-    var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
-        if ((allyName == undefined) || (allyName == ''))  { allyName = 'none';}
+    if (reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0] != undefined) { 
+        var allyName = reqCharacterSheet.responseXML.getElementsByTagName("allianceName")[0].textContent;
+        } else {
+        var allyName = 'none'; 
+        }
     var rowsetList = reqCharacterSheet.responseXML.getElementsByTagName("rowset");
     var rowsetSkillsElement;
 
@@ -519,14 +522,10 @@ function mailList() {
 
    }
     
-    if (mailLists.length > 20) {
-        var mailsAmount = 20;
-    } else {
-        var mailsAmount = mailLists.length;
-    }
+
 
     
-    if(mailLists == 0) {
+    if(mailLists == undefined) {
             var noMail = document.createElement('span');
             noMail.innerText = 'Have no mail';
             document.getElementById('count').appendChild(noMail);
@@ -555,8 +554,20 @@ function mailList() {
     } else {
         var unreadArr = JSON.parse(localStorage['unreadArr']);
     }
-
-    if (localStorage['tOfLastRM'] == undefined) {
+    
+    
+    
+    
+    if (mailLists != undefined) {
+        
+    if (mailLists.length > 20) {
+        var mailsAmount = 20;
+    } else {
+        var mailsAmount = mailLists.length;
+    }
+    
+        
+    if ((localStorage['tOfLastRM'] == undefined) || (localStorage['tOfLastRM'] == '')) {
         localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
     }
 //---------- MAIN MAIL SCRIPT----------------------//
@@ -571,7 +582,6 @@ function mailList() {
         var mailTitle = document.createElement('span')
         var toName = document.createElement('span');
         var name;
-        var mailBody = document.createElement('span');
         var bodyText;
         var bodyStr;
         var toCharacterIDs = mailLists[i].getAttribute('toCharacterIDs');
@@ -624,22 +634,15 @@ var typeOfMessage = 3;
         
 
         
-        var mailR = new XMLHttpRequest ();
-        mailR.open('GET', "https://api.eveonline.com/char/MailBodies.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode + "&ids=" + mailID , false);
-        mailR.onload = (function () {
-           bodyText = mailR.responseXML.getElementsByTagName("row")[0].childNodes[0].nodeValue;
-           return bodyText;
 
-        });
-        mailR.send(null);
         
         sendDate.setAttribute('class','time');
         
         tdMailTitle.appendChild(mailTitle).innerText = mailLists[i].getAttribute('title');
         tdMailTitle.appendChild(sendDate).innerHTML = '<br>' + mailLists[i].getAttribute('sentDate');
         tdMailTitle.appendChild(toName).innerHTML = '<br>To: ' + name;
-        tdMailTitle.appendChild(mailBody).innerHTML = '<br><br>' + bodyText;
         tdMailTitle.setAttribute('class', 'skillName');
+        tdMailTitle.setAttribute('id',mailID);
 
 
         
@@ -683,9 +686,18 @@ var typeOfMessage = 3;
     
   
         }
+        
+        
+        
+        
+
 //----------end of set unread part -------------//
-//----------END MAIN MAIL SCRIPT----------------------//   
+//----------END MAIN MAIL SCRIPT----------------------//
         localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
+    } else {
+        localStorage['tOfLastRM'] = '';
+        localStorage.unreadArr = JSON.stringify(unreadArr);
+    }   
 
         localStorage['unread1'] = unreadOfType1;
         localStorage['unread2'] = unreadOfType2;

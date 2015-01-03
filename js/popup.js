@@ -1,6 +1,10 @@
 if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
 var queueTrList = [];
 var unreadArr = JSON.parse(localStorage['unreadArr']);
+var vcode = localStorage["vcode"];
+var keyid = localStorage["keyid"];
+var characterid = localStorage["characterid"];
+
 
 function init() {
     
@@ -58,6 +62,7 @@ function init() {
     updateCounters();
     initTabs();
     setUnread();
+    mailBodyInit();
 
 
 }
@@ -138,6 +143,30 @@ function setUnread () {
         markAsRead.innerText = 'Mark all as read';
         divToMark.appendChild(markAsRead);
         }
+}
+function mailBodyInit () {
+    $("th.header").click( function(){
+        var load = $(this).attr('load');
+        if (load != 'true') {
+            load = 'false'
+        }
+        var mailID = $(this).attr('messid');
+        var mailBody = document.createElement('span');
+        var mailR = new XMLHttpRequest ();
+
+        if ((load == 'false')||(load == undefined) ){
+        mailR.open('GET', "https://api.eveonline.com/char/MailBodies.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode + "&ids=" + mailID , false);
+        mailR.onload = (function () {
+        bodyText = mailR.responseXML.getElementsByTagName("row")[0].childNodes[0].nodeValue;
+        return bodyText;
+        });
+        mailR.send(null);
+        document.getElementById(mailID).appendChild(mailBody).innerHTML = '<br><br>' + bodyText;
+        load = 'true';
+        $(this).attr('load', load);
+        }
+
+    });
 }
 if (document.addEventListener)
     document.addEventListener("DOMContentLoaded", init, false);
