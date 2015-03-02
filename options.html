@@ -1,25 +1,42 @@
 <html>
 <head><title>EveCM settings</title>
+
 <script type="text/javascript" src="js/options.js"></script>
 <link rel="stylesheet" type="text/css" href="options.css"/>
 </head>
 
 <body>
-<center>
-<table id="main"><tr><td>
-<table id="options">
-<tr><th colspan="2">Settings (you can create API keys at <a href="https://support.eveonline.com/api">support.eveonline.com</a>)</th></tr>
-<tr><td>keyID</td><td><input type="text" id="kid" size="15"></td></tr>
-<tr><td>vCode</td><td><input type="text" id="vcode" size="100"></td></tr>
-<tr><td>character</td><td><button id="get_chars">Get list & key info</button><select id="chars"></select></td></tr>
-<tr><td>static data</td><td><button id="update_xml">Update</button> <span id="last-upd">none</span></td></tr>
-<tr><td colspan="2"><input type="checkbox" id="seconds"> Display seconds in tooltip count</td></tr>
-<tr><td><button id="save_options">Save</button></td><td><span id="status"></span></td></tr>
-</table></td>
-<td><div id="keyDiv">
-<div id="keyDesc">Key type: <span id="keyType"></span>, mask:<span id="keyMask"></span></div>
-<ul id="keyInfo"></ul></div></td></tr>
-</table>
-</center>
+<div id="textHeader">Settings (you can create API keys at <a href="https://support.eveonline.com/api">support.eveonline.com</a>)</div>
+<div id="main" charN="1">
+<div id="charImage_1" class="charImage"></div>
+<div id="second"><span>keyID: </span><input class="input" type="text" id="kid_1" size="80"></div>
+<div id="second"><span>vCode: </span><input class="input" type="text" id="vcode_1" size="80"></div>
+<div id="second"><span>Character: </span><select id="chars_1" class="chars"></select><button id="get_chars_1" class="get_chars" charN="1">Get list & key info</button></div>
+<div id="second"><span>Static data: <span id="last-upd_1">none</span></div>
+<button id="save_options_1" class="save_options" charN="1">Save</button><span id="status_1" class="status"></span>
+<div class="delete" title="Delete Character" id="delete_1" charN="1"></div>
+</div>
+
+<div id="main" charN="2">
+<div id="charImage_2" class="charImage"></div>
+<div id="second"><span>keyID: </span><input class="input" type="text" id="kid_2" size="80"></div>
+<div id="second"><span>vCode: </span><input class="input" type="text" id="vcode_2" size="80"></div>
+<div id="second"><span>Character: </span><select id="chars_2" class="chars"></select><button id="get_chars_2" class="get_chars" charN="2">Get list & key info</button></div>
+<div id="second"><span>Static data: <span id="last-upd_2">none</span></div>
+<button id="save_options_2" class="save_options" charN="2">Save</button><span id="status_2" class="status"></span>
+<div class="delete" title="Delete Character" id="delete_2" charN="2"></div>
+</div>
+
+<div id="main" charN="3">
+<div id="charImage_3" class="charImage"></div>
+<div id="second"><span>keyID: </span><input class="input" type="text" id="kid_3" size="80"></div>
+<div id="second"><span>vCode: </span><input class="input" type="text" id="vcode_3" size="80"></div>
+<div id="second"><span>Character: </span><select id="chars_3" class="chars"></select><button id="get_chars_3" class="get_chars" charN="3">Get list & key info</button></div>
+<div id="second"><span>Static data: <span id="last-upd_3">none</span></div>
+<button id="save_options_3" class="save_options" charN="3">Save</button><span id="status_3" class="status"></span>
+<div class="delete" title="Delete Character" id="delete_3" charN="3"></div>
+</div>
+
+
 </body>
 </html>

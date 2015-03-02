@@ -1,6 +1,6 @@
 body {
   min-width:357px;
-
+  margin:0;
   overflow-x:hidden;
   background:#313131;
   color:white;
@@ -263,4 +263,89 @@ font-size: 10px;
 }
 #markAllAsRead:hover {
     background-color: rgba(150,150,150,0.4);    
+}
+#time {
+    display: none;
+}
+#i {
+    margin:8px;
+}
+#charSelect {
+    height: 120px;
+    width:100%;
+    clear:both;
+    background-image: url(img/bg2.jpg);
+    position:relative;
+    top:0px;
+    left:0px;
+    display:none;
+    
+    
+}
+#open {
+    width: 100%;
+    height:10px;
+    background-color: #636363;
+    padding-top:4px;
+    padding-bottom: 4px;
+    font-size: 11px;
+    position:relative;
+}
+#open:hover {
+    background-color: #424242;
+    cursor: pointer;
+}
+.chars {
+    width:64px;
+    height:64px;
+    padding:4px;
+    margin:23px;
+    float:left;
+    background-color:#636363;
+    border-radius:4px;
+    position:relative;
+}
+
+#charSet {
+    margin:0 auto;
+}
+#imgHover {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width: 72px;   
+    height: 72px;
+    border-radius:4px;
+    z-index: 9999;
+}
+#imgHover:hover {
+    background-color: rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+
+#addChar:hover {
+    background-color: rgba(0,0,0,0.3);
+    cursor: pointer;
+}
+#charText {
+    font-size:12px;
+    position:absolute;
+    top:5px;
+    left:85px;
+}
+#loading {
+    width:100%;
+    height:20px;
+    padding-top: 80px;
+    padding-bottom:80px;
+    text-align:center;
+}
+#settings {
+    width:20px;
+    height:20px;
+    display:block;
+    position: absolute;
+    top:5px;
+    left:5px;
+    background-image: url(img/settings.png);
 }

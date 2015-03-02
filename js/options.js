@@ -1,63 +1,50 @@
-if (localStorage['main'] == undefined){
-    localStorage['main'] = '1';
-}
-if (localStorage['char'+localStorage['main']] == undefined){
-    infoArr = {};
-} else {
-    infoArr = JSON.parse(localStorage['char'+localStorage['main']]);
-}
-function save_options() {
-  localStorage["keyid"] = document.getElementById("kid").value;
-  localStorage["vcode"] = document.getElementById("vcode").value;
-  localStorage["keyType"] = document.getElementById("keyType").innerText;
-  localStorage["keyMask"] = document.getElementById("keyMask").innerText;
-  localStorage["characterid"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].value;
-  localStorage["charactername"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].innerHTML;
-  infoArr["keyid"] = document.getElementById("kid").value;
-  infoArr["vcode"] = document.getElementById("vcode").value;
-  infoArr["keyType"] = document.getElementById("keyType").innerText;
-  infoArr["keyMask"] = document.getElementById("keyMask").innerText;
-  infoArr["characterid"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].value;
-  infoArr["charactername"] = document.getElementById("chars").children[document.getElementById("chars").selectedIndex].innerHTML;
-  
-  if (document.getElementById('seconds').checked == true) {
-      localStorage['seconds'] = 1000;
-  } else{
-      localStorage['seconds'] = 60000;
-  }
 
-  var status = document.getElementById("status");
+
+function save_options() {
+  var charNum = this.getAttribute('charN');
+  localStorage["keyid_"+charNum] = document.getElementById("kid_"+charNum).value;
+  localStorage["vcode_"+charNum] = document.getElementById("vcode_"+charNum).value;
+  localStorage["characterid_"+charNum] = document.getElementById("chars_"+charNum).children[document.getElementById("chars_"+charNum).selectedIndex].value;
+  localStorage["charactername_"+charNum] = document.getElementById("chars_"+charNum).children[document.getElementById("chars_"+charNum).selectedIndex].innerHTML;
+  localStorage['seconds'] = 60000;
+  if (!localStorage['mainChar']){
+    localStorage['mainChar'] = charNum;
+  }
+  var status = document.getElementById("status_"+charNum);
   status.innerHTML = "Options Saved.";
   setTimeout(function() {
     status.innerHTML = "";
   }, 750);
-  localStorage['char'+localStorage['main']] = JSON.stringify(infoArr);
+  restore_options();
 }
 
 // Restores select box state to saved value from localStorage.
 function restore_options() {
-  var kid = localStorage["keyid"];
-  var vcode = localStorage["vcode"];
-  var keyType = localStorage["keyType"];
-  var keyMask = localStorage["keyMask"];
-  var characterID = localStorage["characterid"];
-  var characterName = localStorage["charactername"];
+for (var count = 1;count<4;count++) {
+  var kid = localStorage["keyid_"+count];
+  var vcode = localStorage["vcode_"+count];
+  var characterID = localStorage["characterid_"+count];
+  var characterName = localStorage["charactername_"+count];
   if (!kid || !vcode || !characterID || !characterName) {
-    return;
-  }
-  document.getElementById("kid").value = kid;
-  document.getElementById("vcode").value = vcode;
-  document.getElementById('keyMask').innerText = keyMask;
-  document.getElementById('keyType').innerText = keyType;
+    
+  } else {
+  document.getElementById("kid_"+count).value = kid;
+  document.getElementById("vcode_"+count).value = vcode;
+
+  var charImage = document.createElement('img');
+  charImage.setAttribute('src', 'http://image.eveonline.com/Character/'+characterID+'_128.jpg');
+  document.getElementById('charImage_'+count).innerHTML = '';
+  document.getElementById('charImage_'+count).appendChild(charImage);
   var character = document.createElement("option");
   character.value = characterID;
   character.innerHTML = characterName;
-  document.getElementById("chars").appendChild(character);
+  document.getElementById("chars_"+count).appendChild(character);
   if (localStorage['seconds'] == 1000) {
       document.getElementById('seconds').checked = true;
   }
   showXml();
-  showKeyInfo(keyMask,keyType);
+    }
+  }
 }
 function updateXml () {
     var d = new Date();
@@ -86,11 +73,13 @@ function updateXml () {
 
 
 function get_chars () {
+var th = this;
+var charNum = this.getAttribute('charN');
 var req = new XMLHttpRequest();
 
-  var kid = document.getElementById("kid").value;
-  var vcode = document.getElementById("vcode").value;
-  document.getElementById("chars").innerHTML="";
+  var kid = document.getElementById("kid_"+charNum).value;
+  var vcode = document.getElementById("vcode_"+charNum).value;
+  document.getElementById("chars_"+charNum).innerHTML="";
   req.open("GET", "https://api.eveonline.com/account/APIKeyInfo.xml.aspx?"+"keyID="+kid+"&vCode="+vcode, true);
    req.onload = function(){
         var xml = req.responseXML;
@@ -100,18 +89,69 @@ var req = new XMLHttpRequest();
                 var character = document.createElement("option");
                 character.value = row.getAttribute("characterID");
                 character.innerHTML = row.getAttribute("characterName");
-                document.getElementById("chars").appendChild(character);
+                document.getElementById("chars_"+charNum).appendChild(character);
         }
-        showKeyInfo(keyInfo.getAttribute('accessMask'), keyInfo.getAttribute('type'));
-        document.getElementById('keyType').innerText = keyInfo.getAttribute('type');
-        document.getElementById('keyMask').innerText = keyInfo.getAttribute('accessMask');
+
     };
 
    req.send(null);
 
 }
 
+function deleteChar() {
+    var charNum = this.getAttribute('charN');
+    if (!localStorage["keyid_"+charNum] || !localStorage["vcode_"+charNum] || !localStorage["characterid_"+charNum] || !localStorage["charactername_"+charNum]){
+        return;
+    } else {
+        var mainDiv = document.createElement('span');
+        var accept = document.createElement('div');
+        var cancel = document.createElement('div');
+        var span = document.createElement('span');
+        mainDiv.setAttribute('id','deleteDiv_'+charNum);
+        span.innerText = "Are you sure?";
+        accept.setAttribute('class','accept');
+        accept.innerText = 'Yes';
+        cancel.setAttribute('class','cancel');
+        cancel.innerText = 'No';
+        mainDiv.appendChild(cancel);
+        mainDiv.appendChild(accept);
+        mainDiv.appendChild(span);
+        document.getElementById('status_'+charNum).appendChild(mainDiv);
+        accept.addEventListener('click', function(){
+            if (charNum == localStorage['mainChar']){
+                localStorage.removeItem('mainChar');
+                for (var i=1; i<4;i++) {
+                    if ((localStorage['vcode_'+i] != undefined) && (localStorage['keyid_'+i] != undefined)) {
+                        localStorage['mainChar'] = i;
+                        chrome.extension.sendMessage('123', function(backMessage){
+                            if (backMessage = '1'){
 
+                            } 
+                        });
+                        break; 
+                    }
+                }
+            }
+            var deleteDiv = document.getElementById('deleteDiv_'+charNum);
+            deleteDiv.parentNode.removeChild(deleteDiv);
+            localStorage.removeItem('keyid_'+charNum);
+            localStorage.removeItem('characterid_'+charNum);
+            localStorage.removeItem('charactername_'+charNum);
+            localStorage.removeItem('tOfLastRM_'+charNum);
+            localStorage.removeItem('unread1_'+charNum);
+            localStorage.removeItem('unread2_'+charNum);
+            localStorage.removeItem('unread3_'+charNum);
+            localStorage.removeItem('unreadArr_'+charNum);
+            localStorage.removeItem('vcode_'+charNum);
+            window.location.reload();
+        });  
+        cancel.addEventListener('click', function(){
+            var deleteDiv = document.getElementById('deleteDiv_'+charNum);
+            deleteDiv.parentNode.removeChild(deleteDiv);
+
+        });
+    }
+}
 
 
 
@@ -120,56 +160,26 @@ var req = new XMLHttpRequest();
 
 function showXml() {
     if (localStorage['lastUpdate']!=='')  {
-        document.getElementById('last-upd').innerHTML = localStorage['lastUpdate'];
-    }
-}
-
-function showKeyInfo(mask,type) {
-    var parser = new DOMParser();
-    var maskTail = 0;
-    var keyInfo = document.getElementById('keyInfo');
-    keyInfo.innerHTML = "";
-    if (type == 'Account') type='Character';
-    var callList = parser.parseFromString(localStorage['callList'],'application/xhtml+xml');
-    var groups = callList.getElementsByTagName('rowset')[0].getElementsByTagName('row');
-    var bits = callList.getElementsByTagName('rowset')[1].getElementsByTagName('row');
-    for (var i=0, row; row = groups[i]; i++) {
-        var catLi = document.createElement('li');
-        catLi.innerText = row.getAttribute('name');
-        catLi.setAttribute('title',row.getAttribute('description'));
-        catLi.setAttribute('colspan','2');
-        keyInfo.appendChild(catLi);
-        var catUl = document.createElement('ul');
-        catLi.appendChild(catUl);
-        catUl.setAttribute('id','group'+row.getAttribute('groupID'));
-
-    }
-    for (var k=0, bitRow; bitRow = bits[k]; k++) {
-        if (bitRow.getAttribute('type') == type){
-            var bitLi = document.createElement('li');
-            bitLi.innerText = bitRow.getAttribute('name');
-            bitLi.setAttribute('title', bitRow.getAttribute('description'));
-            document.getElementById('group'+bitRow.getAttribute('groupID')).appendChild(bitLi);
-            maskTail = mask - bitRow.getAttribute('accessMask');
-            if (maskTail >= 0){
-                //alert(bitRow.getAttribute('accessMask')+' '+bitRow.getAttribute('name'));
-                mask = maskTail;
-                bitLi.setAttribute('class','enabled');
-            } else {
-                bitLi.setAttribute('class','disabled');
-            }
+        for (var i = 1; i<4;i++){
+        document.getElementById('last-upd_'+i).innerHTML = localStorage['lastUpdate'];
         }
     }
-
-
 }
+
+
 
 document.addEventListener("DOMContentLoaded", function(){
     restore_options();
     updateXml();
-    document.getElementById("get_chars").addEventListener("click", get_chars);
-
-    document.getElementById("save_options").addEventListener("click", save_options);
+    document.getElementById("get_chars_1").addEventListener("click", get_chars);
+    document.getElementById("get_chars_2").addEventListener("click", get_chars);
+    document.getElementById("get_chars_3").addEventListener("click", get_chars);
+    document.getElementById("save_options_1").addEventListener("click", save_options);
+    document.getElementById("save_options_2").addEventListener("click", save_options);
+    document.getElementById("save_options_3").addEventListener("click", save_options);
+    document.getElementById("delete_1").addEventListener("click", deleteChar);
+    document.getElementById("delete_2").addEventListener("click", deleteChar);
+    document.getElementById("delete_3").addEventListener("click", deleteChar);
 });
 
 

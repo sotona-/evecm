@@ -1,9 +1,10 @@
-if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
+if (localStorage['mainChar']!=undefined) {
 var queueTrList = [];
-var unreadArr = JSON.parse(localStorage['unreadArr']);
-var vcode = localStorage["vcode"];
-var keyid = localStorage["keyid"];
-var characterid = localStorage["characterid"];
+var mainChar = localStorage['mainChar'];
+var unreadArr = JSON.parse(localStorage['unreadArr_'+mainChar]);
+var vcode = localStorage["vcode_"+mainChar];
+var keyid = localStorage["keyid_"+mainChar];
+var characterid = localStorage["characterid_"+mainChar];
 
 
 function init() {
@@ -19,11 +20,11 @@ function init() {
                 var messageID = $(this).attr('messid');
                 var tof = $(this).attr('tof');
                 delete unreadArr[messageID];
-                localStorage.unreadArr = JSON.stringify(unreadArr);
+                localStorage['unreadArr_'+mainChar] = JSON.stringify(unreadArr);
                 var amountOfUnread = parseInt(document.getElementById('unread'+tof).textContent);
                 $('span#unread'+tof).html(amountOfUnread-1);
-                localStorage['unread'+tof] = amountOfUnread-1; 
-                if ((localStorage['unread1'] == 0) && (localStorage['unread2'] == 0) && (localStorage['unread3'] == 0)) {
+                localStorage['unread'+tof+'_'+mainChar] = amountOfUnread-1; 
+                if ((localStorage['unread1_'+mainChar] == 0) && (localStorage['unread2_'+mainChar] == 0) && (localStorage['unread3_'+mainChar] == 0)) {
                     chrome.browserAction.setIcon({
                         path: "icon.png"
                     });
@@ -44,28 +45,33 @@ function init() {
         $('span#unread1').html('0');
         $('span#unread2').html('0');
         $('span#unread3').html('0');
-        localStorage['unread1'] = 0;
-        localStorage['unread2'] = 0; 
-        localStorage['unread3'] = 0;  
+        localStorage['unread1_'+mainChar] = 0;
+        localStorage['unread2_'+mainChar] = 0; 
+        localStorage['unread3_'+mainChar] = 0;  
         chrome.browserAction.setIcon({
             path: "icon.png"
         }); 
         unreadArr = {};
-        localStorage.unreadArr = JSON.stringify(unreadArr);
+        localStorage['unreadArr_'+mainChar] = JSON.stringify(unreadArr);
         var parentElement = document.getElementById('tab4');
         var elementToRemove = document.getElementById('markAllAsRead');
         parentElement.removeChild(elementToRemove);
 
     });
+
     var queueDiv = document.getElementById('idSkillInTraining');
     queueTrList = queueDiv.getElementsByTagName('tr');
-    updateCounters();
+    updateCounters()
     initTabs();
     setUnread();
     mailBodyInit();
 
 
+
 }
+
+
+
 
 function updateCounters() {
     for (var i=0,row; row = queueTrList[i]; i++) {
@@ -133,10 +139,10 @@ function setUnread () {
         }
         
     });
-        document.getElementById('unread1').innerText = localStorage['unread1'];
-        document.getElementById('unread2').innerText = localStorage['unread2'];
-        document.getElementById('unread3').innerText = localStorage['unread3'];
-            if ((localStorage['unread1']>0)||(localStorage['unread2']>0)||(localStorage['unread3']>0)) {
+        document.getElementById('unread1').innerText = localStorage['unread1_'+mainChar];
+        document.getElementById('unread2').innerText = localStorage['unread2_'+mainChar];
+        document.getElementById('unread3').innerText = localStorage['unread3_'+mainChar];
+            if ((localStorage['unread1_'+mainChar]>0)||(localStorage['unread2_'+mainChar]>0)||(localStorage['unread3_'+mainChar]>0)) {
         var markAsRead = document.createElement('div');
         var divToMark = document.getElementById('tab4');
         markAsRead.setAttribute('id','markAllAsRead');
@@ -168,9 +174,78 @@ function mailBodyInit () {
 
     });
 }
+function charSelect () {
+    var str1 = '<center>Select<img src="img/down.png">Character</center>';
+    var str2 = '<center>Close<img src="img/up.png">Tab</center>';
+    document.getElementById('open').innerHTML = str1;
+    $('.open').click(function(){
+        $('#charSelect').slideToggle(750);
+        if (document.getElementById('open').innerHTML == str1){
+            document.getElementById('open').innerHTML = str2;   
+        } else {
+            document.getElementById('open').innerHTML = str1;    
+        }   
+    });
+    
+    for (var i = 1;i<4;i++){
+        var kid = localStorage["keyid_"+i];
+        var vcode = localStorage["vcode_"+i];
+        var characterID = localStorage["characterid_"+i];
+        var characterName = localStorage["charactername_"+i];
+        if (!kid || !vcode || !characterID || !characterName) {
+            var charImg = document.createElement('img');
+            var a = document.createElement('a');
+            document.getElementById('char'+i).removeChild(document.getElementById('char'+i).childNodes[0]);
+            charImg.setAttribute('src','img/'+i+'.jpg');
+            $('#char'+i).find('#imgHover').attr('title','Add Character');
+            a.setAttribute('target','_blank');
+            a.setAttribute('href','chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html');
+            a.setAttribute('id','addChar');
+            a.setAttribute('title','Add New Character');
+            a.setAttribute('charN',i);
+            a.appendChild(charImg);
+            document.getElementById('char'+i).appendChild(a);
+            a.addEventListener("mouseover",function(){
+                a.childNodes[0].setAttribute('src','img/plus.jpg');
+            });
+            a.addEventListener("mouseleave",function(){
+                a.childNodes[0].setAttribute('src','img/'+this.getAttribute('charN')+'.jpg');
+            });
+    
+        } else {
+            var charImg = document.createElement('img');
+            charImg.setAttribute('src', 'http://image.eveonline.com/Character/'+characterID+'_64.jpg');
+            charImg.setAttribute('title',localStorage["charactername_"+i]);
+            $('#char'+i).find('#imgHover').attr('title',localStorage["charactername_"+i]);
+            document.getElementById('char'+i).appendChild(charImg);
+            document.getElementById('char'+i).addEventListener("click",function(){
+                var time = document.getElementById('time').textContent;
+                localStorage['mainChar'] =  this.getAttribute('charN');
+                document.getElementById('i').innerHTML = '';
+                document.getElementById('i').innerHTML = '<div id="loading">Loading, please wait.</div>';        
+                    chrome.extension.sendMessage('123', function(backMessage){
+                        if (backMessage = '1'){
+                            function check() {
+                                var time2 = chrome.extension.getBackgroundPage().document.getElementById('time');
+                                if ((time2.textContent != time) && (time2.textContent != undefined) && (time2.textContent != '')){
+                                    init();
+                                } else {
+                                    setTimeout(function(){ check() }, 1000);
+                                }
+                            }
+                            check();
+                        }   
+                    });       
+            });
+        }    
+    }
+}
 if (document.addEventListener)
-    document.addEventListener("DOMContentLoaded", init, false);
+    document.addEventListener("DOMContentLoaded",function (){ 
+        init();
+        charSelect()
+    }, false);
 } else {
-    var str = '<span>invalid vCode or keyID<span> <br> <a target="_blank" href="chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html">Open Settings</a>';
+    var str = '<span>No character is defined<span> <br> <a target="_blank" href="chrome-extension://eiiimmjkmakohhdfdjhkdochlcggocko/options.html">Open Settings</a>';
     $(document).ready(function (){$('div#i').html(str);});
 }

@@ -1,5 +1,33 @@
 
-if (((localStorage['vcode'] !== '') || (localStorage['keyid'] !== '')) && ((localStorage['vcode'] !== undefined) || (localStorage['keyid'] !== undefined))) {
+if (!localStorage['mainChar']) {
+    var vcodeOld = localStorage["vcode"];
+    var keyidOld = localStorage["keyid"];
+    var characteridOld = localStorage["characterid"];
+    alert('123');
+    if (!vcodeOld || !keyidOld || !characteridOld){}else{
+        localStorage['keyid_1']=localStorage['keyid'];
+        localStorage['characterid_1']=localStorage['characterid'];
+        localStorage['charactername_1']=localStorage['charactername'];
+        localStorage['tOfLastRM_1']=localStorage['tOfLastRM'];
+        localStorage['unread1_1']=localStorage['unread1'];
+        localStorage['unread2_1']=localStorage['unread2'];
+        localStorage['unread3_1']=localStorage['unread3'];
+        localStorage['unreadArr_1']=localStorage['unreadArr'];
+        localStorage['vcode_1']=localStorage['vcode'];   
+            localStorage.removeItem('keyid');
+            localStorage.removeItem('characterid');
+            localStorage.removeItem('charactername');
+            localStorage.removeItem('tOfLastRM');
+            localStorage.removeItem('unread1');
+            localStorage.removeItem('unread2');
+            localStorage.removeItem('unread3');
+            localStorage.removeItem('unreadArr');
+            localStorage.removeItem('vcode');
+        localStorage['mainChar'] = 1;        
+    }
+    window.setTimeout(function(){ window.location.reload() },1000);   
+} else {
+var mainChar = localStorage['mainChar'];
 var compteur = [];
 var mailLists = [];
 var digit_del = ",";
@@ -23,13 +51,20 @@ var ordersList = new XMLHttpRequest();
 var mailMessages = new XMLHttpRequest();
 var serverStatus = new XMLHttpRequest();
 var paidUntil = new XMLHttpRequest();
-var vcode = localStorage["vcode"];
-var keyid = localStorage["keyid"];
-var characterid = localStorage["characterid"];
+var vcode = localStorage["vcode_"+mainChar];
+var keyid = localStorage["keyid_"+mainChar];
+var characterid = localStorage["characterid_"+mainChar];
 var cycleWait = localStorage['seconds'];
-
-
+ 
+ 
 function init() {
+    chrome.browserAction.setIcon({
+            path: "icon.png"
+    }); 
+    mainChar = localStorage['mainChar']
+    vcode = localStorage["vcode_"+mainChar];
+    keyid = localStorage["keyid_"+mainChar];
+    characterid = localStorage["characterid_"+mainChar];
     reqSkillInTraining.open("GET", apiserver + "/char/SkillInTraining.xml.aspx?keyID=" + keyid + "&characterID=" + characterid + "&vCode=" + vcode, true);
     reqSkillInTraining.onload = recupSkillInTraining;
     reqSkillInTraining.send(null);
@@ -46,7 +81,9 @@ function init() {
     paidUntil.onload = accountStatus;
     paidUntil.send(null);
     //id2name('1,2');
+
     window.setTimeout(function(){ window.location.reload() },600000);
+
 }
 
 function refreshDateFin() {
@@ -135,6 +172,8 @@ function queueCalc() {
     }
     document.getElementById('idSkillInTraining').appendChild(skillTable);
     refreshDateFin();
+    dateObj = new Date ();
+    document.getElementById('time').innerText = dateObj.getTime();
 
 }
 
@@ -158,7 +197,11 @@ function recupSkillInTraining() {
         skillQueue.onload = queueCalc;
         skillQueue.send(null);
     } else {
-        alert("Warning! No Skill in training!");
+        setTimeout(function(){
+            dateObj = new Date ();
+            document.getElementById('time').innerText = dateObj.getTime();  
+        },750);
+        alert('Warning!No skill in queue!');
         chrome.browserAction.setBadgeText({
             text: "warn"
         });
@@ -530,18 +573,18 @@ function mailList() {
             noMail.innerText = 'Have no mail';
             document.getElementById('count').appendChild(noMail);
     }
-    if (localStorage['unread1'] != undefined){
-        var unreadOfType1 = localStorage['unread1'];        
+    if (localStorage['unread1_'+mainChar] != undefined){
+        var unreadOfType1 = localStorage['unread1_'+mainChar];        
     } else {
         var unreadOfType1 = 0;
     }
-    if (localStorage['unread2'] != undefined){
-        var unreadOfType2 = localStorage['unread2'];        
+    if (localStorage['unread2_'+mainChar] != undefined){
+        var unreadOfType2 = localStorage['unread2_'+mainChar];        
     } else {
         var unreadOfType2 = 0;
     }
-    if (localStorage['unread3'] != undefined){
-        var unreadOfType3 = localStorage['unread3'];        
+    if (localStorage['unread3_'+mainChar] != undefined){
+        var unreadOfType3 = localStorage['unread3_'+mainChar];        
     } else {
         var unreadOfType3 = 0;
     }
@@ -549,10 +592,10 @@ function mailList() {
         
 
 
-    if (localStorage['unreadArr'] == undefined) {
+    if (localStorage['unreadArr_'+mainChar] == undefined) {
         var unreadArr = {};
     } else {
-        var unreadArr = JSON.parse(localStorage['unreadArr']);
+        var unreadArr = JSON.parse(localStorage['unreadArr_'+mainChar]);
     }
     
     
@@ -567,8 +610,8 @@ function mailList() {
     }
     
         
-    if ((localStorage['tOfLastRM'] == undefined) || (localStorage['tOfLastRM'] == '')) {
-        localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
+    if ((localStorage['tOfLastRM_'+mainChar] == undefined) || (localStorage['tOfLastRM_'+mainChar] == '')) {
+        localStorage['tOfLastRM_'+mainChar] = mailLists[0].getAttribute('sentDate');
     }
 //---------- MAIN MAIL SCRIPT----------------------//
     for (var i=0; i<mailsAmount; i++){
@@ -657,7 +700,7 @@ var typeOfMessage = 3;
 
 
         var sentDate = mailLists[i].getAttribute('sentDate');
-        var tOfLastRM = localStorage['tOfLastRM'];
+        var tOfLastRM = localStorage['tOfLastRM_'+mainChar];
         var messageID = mailLists[i].getAttribute('messageID');
         if ((sentDate > tOfLastRM) && (unreadArr[messageID] == undefined)) {
             unreadArr[messageID] = "unread";
@@ -679,7 +722,7 @@ var typeOfMessage = 3;
     
     
     if (unreadArr != undefined) {
-        localStorage.unreadArr = JSON.stringify(unreadArr);
+        localStorage['unreadArr_'+mainChar] = JSON.stringify(unreadArr);
 
     }
 
@@ -693,17 +736,17 @@ var typeOfMessage = 3;
 
 //----------end of set unread part -------------//
 //----------END MAIN MAIL SCRIPT----------------------//
-        localStorage['tOfLastRM'] = mailLists[0].getAttribute('sentDate');
+        localStorage['tOfLastRM_'+mainChar] = mailLists[0].getAttribute('sentDate');
     } else {
-        localStorage['tOfLastRM'] = '';
+        localStorage['tOfLastRM_'+mainChar] = '';
         localStorage.unreadArr = JSON.stringify(unreadArr);
     }   
 
-        localStorage['unread1'] = unreadOfType1;
-        localStorage['unread2'] = unreadOfType2;
-        localStorage['unread3'] = unreadOfType3;
+        localStorage['unread1_'+mainChar] = unreadOfType1;
+        localStorage['unread2_'+mainChar] = unreadOfType2;
+        localStorage['unread3_'+mainChar] = unreadOfType3;
 
-        if ((localStorage['unread1']>0)||(localStorage['unread2']>0)||(localStorage['unread3']>0)) {
+        if ((localStorage['unread1_'+mainChar]>0)||(localStorage['unread2_'+mainChar]>0)||(localStorage['unread3_'+mainChar]>0)) {
         chrome.browserAction.setIcon({
             path: "iconUnreadMail.png"
         }); 
@@ -774,10 +817,18 @@ updateXml();
 
 
 
-if (document.addEventListener)
+if (document.addEventListener) {
     document.addEventListener("DOMContentLoaded", init, false);
-    
-} else {
-window.setTimeout(function(){ window.location.reload() },1000);
-}
+    }
+chrome.extension.onMessage.addListener(function(request, sender, f_callback){
+    if(request=='123') {//проверяется, от того ли окна и скрипта отправлено
 
+            window.location.reload();  
+            f_callback('1'); 
+
+    }
+   
+});
+
+    
+} 
