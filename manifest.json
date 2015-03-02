@@ -18,5 +18,5 @@
    "options_page": "options.html",
    "permissions": [ "https://api.eveonline.com/", "notifications", "storage" ],
    "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "0.8.2"
+   "version": "1.0.0"
 }
